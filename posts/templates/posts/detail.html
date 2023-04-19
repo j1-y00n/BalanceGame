@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {% block content %}
+<h1>{{post.title}}</h1>
+<h6>{{post.select1_content}}</h6>
+<h6>{{post.select2_content}}</h6>
+
+<a class="btn" href="{% url 'posts:index' %}">뒤로가기</a>
+
+{% endblock content %} {% comment %}
+<form action="{% url 'articles:likes' article.pk %}" method="POST">
+  {% csrf_token %} {% if request.user in article.like_users.all %}
+  <input type="submit" value="좋아요 취소" />
+  {% else %}
+  <input type="submit" value="좋아요" />
+  {% endif %}
+</form>
+{% endcomment %}
