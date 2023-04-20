@@ -1,23 +1,60 @@
 {% extends 'base.html' %} {% block content %}
-<h1>{{post.title}}</h1>
-<h6>{{post.select1_content}}</h6>
-<h6>{{post.select2_content}}</h6>
+<h6>{{post.title}}</h6>
+<h6>
+  <a href="{% url 'accounts:profile' post.user.username %}">{{post.user}}</a>
+</h6>
+<form action="{% url 'posts:likes' post.pk %}" method="post">
+  {% csrf_token %} {% if request.user in post.like_users.all %}
+  <input
+    class="btn btn-sm btn-outline-dark"
+    type="submit"
+    value="좋아요 취소"
+  />
 
-<form action="{% url 'posts:answer' post.pk post.select1_content%}" method="POST">
-  {% csrf_token %}
-  <input type="submit" name="select1" value={{ post.select1_content}}>
-  <input type="submit" value={{ post.select2_content}}>
-</form>
- {{ post.select1_users.all|length }}
-
-<a class="btn" href="{% url 'posts:index' %}">뒤로가기</a>
-
-{% endblock content %} {% comment %}
-<form action="{% url 'articles:likes' article.pk %}" method="POST">
-  {% csrf_token %} {% if request.user in article.like_users.all %}
-  <input type="submit" value="좋아요 취소" />
   {% else %}
-  <input type="submit" value="좋아요" />
+  <input class="btn btn-sm btn-outline-dark" type="submit" value="좋아요" />
+
   {% endif %}
 </form>
-{% endcomment %}
+
+{% if post.image1 %}
+<img style="width: 300px" src="{{post.image1.url}}" alt="img" />
+{% endif %}
+
+<form
+  action="{% url 'posts:answer' post.pk post.select1_content %}"
+  method="POST"
+>
+  {% csrf_token %}
+  <button
+    class="btn btn-sm btn-outline-dark my-2"
+    type="submit"
+    name="select1"
+    value="{{post.select1_content}}"
+  >
+    {{ post.select1_content}} : {{ post.select1_users.all|length }}
+  </button>
+</form>
+{% if post.image2 %}
+<img style="width: 300px" src="{{post.image2.url}}" alt="img" />
+{% endif %}
+<form
+  action="{% url 'posts:answer' post.pk post.select2_content %}"
+  method="post"
+>
+  {% csrf_token %}
+  <button
+    class="btn btn-sm btn-outline-dark my-2"
+    type="submit"
+    name="select2"
+    value="{{post.select1_content}}"
+  >
+    {{ post.select2_content }} : {{ post.select2_users.all|length }}
+  </button>
+</form>
+
+<a class="btn btn-sm btn-outline-success my-2" href="{% url 'posts:index' %}"
+  >뒤로가기</a
+>
+
+{% endblock content %}
