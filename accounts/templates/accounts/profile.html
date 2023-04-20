@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block content %}
+<h1>프로필</h1>
+{% if request.user != person %}
+<form action="{% url 'accounts:follow' person.pk %}" method="post">
+  {% csrf_token %} {% if request.user in person.followers.all %}
+  <input class="btn btn-sm btn-outline-dark" type="submit" value="언팔로우" />
+  {% else %}
+  <input class="btn btn-sm btn-outline-dark" type="submit" value="팔로우" />
+  {% endif %}
+</form>
+
+{% else %}
+<input
+  class="btn btn-sm btn-outline-dark"
+  type="button"
+  value="팔로우"
+  disabled
+/>
+
+{% endif %} {% endblock content %}

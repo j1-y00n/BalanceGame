@@ -1,26 +1,60 @@
 {% extends 'base.html' %} {% block content %}
-<h1>{{post.title}}</h1>
+<h6>{{post.title}}</h6>
+<h6>
+  <a href="{% url 'accounts:profile' post.user.username %}">{{post.user}}</a>
+</h6>
+<form action="{% url 'posts:likes' post.pk %}" method="post">
+  {% csrf_token %} {% if request.user in post.like_users.all %}
+  <input
+    class="btn btn-sm btn-outline-dark"
+    type="submit"
+    value="좋아요 취소"
+  />
+
+  {% else %}
+  <input class="btn btn-sm btn-outline-dark" type="submit" value="좋아요" />
+
+  {% endif %}
+</form>
+
 {% if post.image1 %}
-  <img src="{{post.image1.url}}" alt="img">
+<img style="width: 300px" src="{{post.image1.url}}" alt="img" />
 {% endif %}
 
-<form action="{% url 'posts:answer' post.pk post.select1_content%}" method="POST">
+<form
+  action="{% url 'posts:answer' post.pk post.select1_content %}"
+  method="POST"
+>
   {% csrf_token %}
-  <button type="submit" name="select1" value={{ post.select1_content}}>
-    {{ post.select1_content}} : {{ post.select1_users.all|length }}</button>
-
+  <button
+    class="btn btn-sm btn-outline-dark my-2"
+    type="submit"
+    name="select1"
+    value="{{post.select1_content}}"
+  >
+    {{ post.select1_content}} : {{ post.select1_users.all|length }}
+  </button>
 </form>
 {% if post.image2 %}
-  <img src="{{post.image2.url}}" alt="img">
+<img style="width: 300px" src="{{post.image2.url}}" alt="img" />
 {% endif %}
-<form action="{% url 'posts:answer' post.pk post.select2_content %}" method="post">
+<form
+  action="{% url 'posts:answer' post.pk post.select2_content %}"
+  method="post"
+>
   {% csrf_token %}
-  <button type="submit" name="select2" value={{ post.select2_content }}>
+  <button
+    class="btn btn-sm btn-outline-dark my-2"
+    type="submit"
+    name="select2"
+    value="{{post.select1_content}}"
+  >
     {{ post.select2_content }} : {{ post.select2_users.all|length }}
   </button>
 </form>
 
-
-<a class="btn" href="{% url 'posts:index' %}">뒤로가기</a>
+<a class="btn btn-sm btn-outline-success my-2" href="{% url 'posts:index' %}"
+  >뒤로가기</a
+>
 
 {% endblock content %}

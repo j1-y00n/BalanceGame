@@ -16,3 +16,12 @@ class Post(models.Model):
         settings.AUTH_USER_MODEL, related_name='select1_posts')
     select2_users = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='select2_posts')
+    like_users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='like_posts')
+
+
+class Comment(models.Model):
+    content = models.CharField(max_length=200)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)

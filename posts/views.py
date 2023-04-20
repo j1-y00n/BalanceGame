@@ -42,15 +42,26 @@ def create(request):
 
 
 def answer(request, post_pk, answer):
-   
+
     post = Post.objects.get(pk=post_pk)
     if request.user not in post.select1_users.all() and request.user not in post.select2_users.all():
         answer1 = request.POST.get('select1')
         answer2 = request.POST.get('select2')
-        
+
         if answer1 == post.select1_content:
             post.select1_users.add(request.user)
         else:
             post.select2_users.add(request.user)
- 
+
+    return redirect('posts:detail', post.pk)
+
+
+@login_required
+def likes(request, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    if request.user in post.like_users.all():
+        post.like_users.remove(request.user)
+    else:
+        post.like_users.add(request.user)
+
     return redirect('posts:detail', post.pk)
