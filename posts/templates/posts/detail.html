@@ -1,60 +1,107 @@
 {% extends 'base.html' %} {% block content %}
-<h6>{{post.title}}</h6>
-<h6>
-  <a href="{% url 'accounts:profile' post.user.username %}">{{post.user}}</a>
+<h4 class="text-center"><b>{{post.title}}</b></h4>
+<h6 class="d-flex justify-content-end">
+  <p>작성자: </p>
+  <a class="mx-2" href="{% url 'accounts:profile' post.user.username %}">{{post.user}}</a>
 </h6>
-<form action="{% url 'posts:likes' post.pk %}" method="post">
-  {% csrf_token %} {% if request.user in post.like_users.all %}
-  <input
-    class="btn btn-sm btn-outline-dark"
-    type="submit"
-    value="좋아요 취소"
-  />
 
-  {% else %}
-  <input class="btn btn-sm btn-outline-dark" type="submit" value="좋아요" />
 
+<div class="row">
+  <div class="col-5 text-center"> 
+    {% if post.image1 %}
+    <img class="rounded" style="width: 85%" src="{{post.image1.url}}" alt="img" />
+    {% endif %}
+    
+    <form
+      action="{% url 'posts:answer' post.pk post.select1_content %}"
+      method="POST"
+    >
+      {% csrf_token %}
+      <button
+        class="btn btn-sm btn-outline-dark my-2"
+        type="submit"
+        name="select1"
+        value="{{post.select1_content}}"
+      >
+        {{ post.select1_content}} : {{ post.select1_users.all|length }}
+      </button>
+    </form>
+  </div>
+<div class="col-2 d-flex text-center justify-content-center align-items-center">
+  <h4><b>VS</b></h4>
+
+</div>
+<div class="col-5 text-center">
+  {% if post.image2 %}
+  <img class="rounded" style="width: 85%" src="{{post.image2.url}}" alt="img" />
   {% endif %}
-</form>
-
-{% if post.image1 %}
-<img style="width: 300px" src="{{post.image1.url}}" alt="img" />
-{% endif %}
-
-<form
-  action="{% url 'posts:answer' post.pk post.select1_content %}"
-  method="POST"
->
-  {% csrf_token %}
-  <button
-    class="btn btn-sm btn-outline-dark my-2"
-    type="submit"
-    name="select1"
-    value="{{post.select1_content}}"
+  <form
+    action="{% url 'posts:answer' post.pk post.select2_content %}"
+    method="post"
   >
-    {{ post.select1_content}} : {{ post.select1_users.all|length }}
-  </button>
-</form>
-{% if post.image2 %}
-<img style="width: 300px" src="{{post.image2.url}}" alt="img" />
-{% endif %}
-<form
-  action="{% url 'posts:answer' post.pk post.select2_content %}"
-  method="post"
->
-  {% csrf_token %}
-  <button
-    class="btn btn-sm btn-outline-dark my-2"
-    type="submit"
-    name="select2"
-    value="{{post.select1_content}}"
-  >
-    {{ post.select2_content }} : {{ post.select2_users.all|length }}
-  </button>
-</form>
+    {% csrf_token %}
+    <button
+      class="btn btn-sm btn-outline-dark my-2"
+      type="submit"
+      name="select2"
+      value="{{post.select1_content}}"
+    >
+      {{ post.select2_content }} : {{ post.select2_users.all|length }}
+    </button>
+  </form>
+  
+  </div>
+</div>
 
-<a class="btn btn-sm btn-outline-success my-2" href="{% url 'posts:index' %}"
+<div class="d-flex d-inline-block justify-content-end">
+  <form action="{% url 'posts:likes' post.pk %}" method="post">
+    {% csrf_token %} {% if request.user in post.like_users.all %}
+    <button
+      class="btn btn-sm btn-outline-dark"
+      type="submit"
+
+    > 
+    좋아요 취소 {{ post.like_users.all|length }}
+  </button>
+  
+    {% else %}
+    <button class="btn btn-sm btn-outline-danger" type="submit" />
+    좋아요 {{ post.like_users.all|length }}
+  </button>
+  
+    {% endif %}
+  </form>
+
+  <a class="d-inline-block justify-content-end btn btn-sm btn-outline-info mx-2" href="{% url 'posts:index' %}"
   >뒤로가기</a
 >
+
+
+</div>
+
+
+{# comment #}
+<hr>
+<form action="{% url 'posts:comment_create' post.pk %}" method="post">
+  {% csrf_token %} {{ comment_form.as_p }}
+  <button type="submit" class="btn btn-sm btn-outline-success d-flex justify-content-end">제출</button>
+</form>
+
+<hr>
+{% for comment in comments %}
+<p>글쓴이: {{ comment.user }}</p>
+<p>댓글 내용: {{ comment.content }}</p>
+
+
+{% if request.user == comment.user %}
+<form action="{% url 'posts:comment_delete' post.pk comment.pk %}" method="post">
+
+  {% csrf_token %}
+  <button type="submit" class="btn btn-sm btn-outline-danger py-1 px-2">삭제</button>
+</form>
+{% endif %}
+
+<hr />
+{% endfor %} 
 
 {% endblock content %}
