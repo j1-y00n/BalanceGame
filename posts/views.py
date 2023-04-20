@@ -39,3 +39,23 @@ def create(request):
         'form': form,
     }
     return render(request, 'posts/create.html', context)
+
+
+def answer(request, post_pk, answer):
+   
+    post = Post.objects.get(pk=post_pk)
+    # if request.user not in post.select1_users.all() and request.user not in post.select2_users.all():
+    #     if answer not in post.select1_posts.all():
+    #         post.select2_users.add(request.user)
+    #     else:
+    #         post.select1_users.add(request.user)
+
+    if request.user not in post.select1_users.all():
+        post.select1_users.add(request.user)
+        # answer = select1_content
+        answer = request.POST.get('select1')
+    #     if 
+    # if request.user in post.select2_users.all():
+    #     select2_content=answer
+
+    return redirect('posts:detail', post.pk)
