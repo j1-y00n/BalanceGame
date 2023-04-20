@@ -3,6 +3,13 @@
 <h6>{{post.select1_content}}</h6>
 <h6>{{post.select2_content}}</h6>
 
+<form action="{% url 'posts:answer' post.pk post.select1_content%}" method="POST">
+  {% csrf_token %}
+  <input type="submit" name="select1" value={{ post.select1_content}}>
+  <input type="submit" value={{ post.select2_content}}>
+</form>
+ {{ post.select1_users.all|length }}
+
 <a class="btn" href="{% url 'posts:index' %}">뒤로가기</a>
 
 {% endblock content %} {% comment %}
