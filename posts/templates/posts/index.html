@@ -1,6 +1,4 @@
-{% extends 'base.html' %} {% block content %}
-<h1>Balance Game</h1>
-{% for post in posts %}
+{% extends 'base.html' %} {% block content %} {% for post in posts %}
 <h6><a href="{% url 'posts:detail' post.pk %}">{{post.title}}</a></h6>
 <hr />
 {% endfor %}
