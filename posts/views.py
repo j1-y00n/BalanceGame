@@ -7,9 +7,11 @@ from django.http import JsonResponse
 
 
 def index(request):
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-pk')
+    post_last = posts.last()
     context = {
         'posts': posts,
+        'post_last': post_last,
     }
     return render(request, 'posts/index.html', context)
 
