@@ -8,8 +8,10 @@ from django.contrib.auth.decorators import login_required
 
 def index(request):
     posts = Post.objects.all()
+    post_first = posts.first()
     context = {
         'posts': posts,
+        'post_first': post_first,
     }
     return render(request, 'posts/index.html', context)
 
