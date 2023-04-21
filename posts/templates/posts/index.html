@@ -1,8 +1,57 @@
-{% extends 'base.html' %} {% block content %} {% for post in posts %}
-<h6><a href="{% url 'posts:detail' post.pk %}">{{post.title}}</a></h6>
-<hr />
-{% endfor %}
+{% extends 'base.html' %}
+{% load static %}
 
-<a class="btn" href="{% url 'posts:create' %}">생성하기</a>
+{% block content %}
+
+<div class="container text-center">
+  <div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+      <div id="carouselAuto" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          
+          {% for post in posts %}
+          <div class="carousel-item active">
+            {% if post.image1 %}
+              {% comment %} <img class="d-block w-100" src="{% static 'posts/one.jpg' %}" alt=""> {% endcomment %}
+            {% else %}
+            <a href="{% url 'posts:detail' post.pk %}">
+              <img class="d-block w-100 object-fit-cover custom-crsl-img-size" src="{% static 'posts/one.jpg' %}" alt="">
+            </a>
+            {% endif %}
+            <div class="carousel-caption d-none d-md-block">
+              <h5>{{ post.select1_content }}</h5>
+            </div>
+          </div>
+          <div class="carousel-item">
+            {% if post.image2 %}
+              {% comment %} <img class="d-block w-100" src="{% static 'posts/two.jpg' %}" alt="">       {% endcomment %}
+            {% else %}
+            <a href="{% url 'posts:detail' post.pk %}">
+              <img class="d-block w-100 object-fit-cover custom-crsl-img-size" src="{% static 'posts/two.jpg' %}" alt="">
+            </a>
+            {% endif %}
+            <div class="carousel-caption d-none d-md-block">
+              <h5>{{ post.select2_content }}</h5>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselAuto" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselAuto" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+    <div class="col-3">
+
+    </div>
+  </div>
+</div>
+
 
 {% endblock content %}
