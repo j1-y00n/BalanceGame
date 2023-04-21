@@ -85,26 +85,21 @@
 <div class="row mt-2">
   <div class="col-1"></div>
   <div class="col-10">
-    <ul>
-      
-    </ul>
     <ol class="list-group list-group-numbered">
-      <li class="list-group-item d-flex justify-content-between align-items-center bg-danger">
-        <span class="">⚠️ very serious questions ⚠️</span>
-      </li>
       {% for post in posts %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
+        <li class="list-group-item d-flex justify-content-between align-items-end">
           <div class="ms-2 me-auto">
             <div class="fw-bold">
               <a href="{% url 'posts:detail' post.pk %}">
                 {{ post.title }}
               </a>
             </div>
-            {{ post.select1_content }}
+            {{ post.select1_content }} vs {{ post.select2_content }}
           </div>
           <span class="badge bg-dark-subtle rounded-pill">
-            {{ post.select1_users|length }}
-          </span>
+            {{ post.select1_users.all|length }}
+          </span><span class="text-secondary">:</span>
+          <span class="badge bg-dark-subtle rounded-pill">{{ post.select2_users.all|length }}</span>
         </li>
       {% endfor %}
       </ol>

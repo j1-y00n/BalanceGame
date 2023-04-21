@@ -1,9 +1,11 @@
 {% extends 'base.html' %} {% block content %}
+{% load static %}
 <h1>CREATE</h1>
 
 <form action="{% url 'posts:create' %}" method="post" enctype="multipart/form-data">
   {% csrf_token %} {{form.as_p}}
-  <input type="submit" />
+  <a href="https://unsplash.com/">이미지 검색<img src="{% static 'Unsplash_Logo_Full_Stacked.png' %}" alt="" style="width: 40px;" class="mx-3"></a>
+  <input type="submit" class="btn btn-outline-dark" />
 </form>
 
 {% endblock content %}

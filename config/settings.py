@@ -31,6 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'port-0-balancegame08-1maxx2algq7tulm.sel3.cloudtype.app',
+    '127.0.0.1',
 ]
 
 
