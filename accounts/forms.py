@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
-        fields = ('username', 'email', 'password1', 'password2',)
+        fields = ('username', 'email', 'password1', 'password2', 'profile_img',)
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control custom-input-form', }),
             'email': forms.TextInput(attrs={'class': 'form-control custom-input-form', }),

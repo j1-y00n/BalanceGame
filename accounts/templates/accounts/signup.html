@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <h4>회원가입</h4>
-<form action="{% url 'accounts:signup' %}" method="post" class="custom-input-form">
+<form action="{% url 'accounts:signup' %}" method="post" enctype="multipart/form-data" class="custom-input-form">
   {% csrf_token %}
   {{ form.as_p }}
   <input type="submit">
