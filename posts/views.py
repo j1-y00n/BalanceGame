@@ -7,11 +7,11 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    posts = Post.objects.all()
-    post_first = posts.first()
+    posts = Post.objects.all().order_by('-pk')
+    post_last = posts.last()
     context = {
         'posts': posts,
-        'post_first': post_first,
+        'post_last': post_last,
     }
     return render(request, 'posts/index.html', context)
 

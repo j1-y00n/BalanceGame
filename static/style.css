@@ -3,6 +3,12 @@
 }
 
 .custom-crsl-img-size {
-    height: 25rem;
-    width: 180rem;
+    height: 30rem;
+}
+
+.caption-with-bg-color {
+    background-color: rgba(35, 35, 36, 0.817);
+    background-blend-mode: screen;
+    border: 0;
+    border-radius: 5px;
 }
