@@ -1,11 +1,42 @@
 {% extends 'base.html' %} 
+{% load static %}
 
 {% block style %}
   <style>
+    body {
+      background-image: url("{% static 'back.jpg' %}");
+      background-position: center;
+      background-attachment: fixed;
+      background-size: cover;
+    }
+
     .body-size{
-      border: black solid 1px;
+      {% comment %} border: black solid 1px; {% endcomment %}
       width: 500px;
+      height: 460px;
       margin: 0 auto;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 8px 7px 30px -8px rgba(0,0,0,0.45);
+    }
+    
+    .information-size{
+      height: 230px;
+    }
+
+    .number {
+      font-size: 2rem;
+      font-weight: 500;
+      padding-top: 1em;
+    }
+
+    .posts {
+      text-decoration-line: none;
+      color: black;
+    }
+    .posts:hover {
+      font-weight: bold;
+      text-decoration-line: underline;
     }
 
   </style>
@@ -14,31 +45,31 @@
 {% block content %}
 <div class="body-size">
   <!-- header 시작 -->
-  <div class="d-flex justify-content-between align-items-center">
-    <div>
-      <h1>{{ person.username }}</h1>
-    </div>
-    <span>
-      {% if request.user.is_authenticated %}
-        {% if request.user != person %}
-          {% if request.user in person.followers.all %}
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-check-fill" viewBox="0 0 16 16">
-              <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/>
-            </svg>
+  <div class="d-flex justify-content-between align-items-center m-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <h1 class="m-0 me-1">{{ person.username }}</h1>
+      <div>
+        {% if request.user.is_authenticated %}
+          {% if request.user != person %}
+            {% if request.user in person.followers.all %}
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-patch-check-fill" viewBox="0 0 16 16">
+                <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/>
+              </svg>
+            {% else %}
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-patch-check" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M10.354 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                <path d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911l-1.318.016z"/>
+              </svg>
+            {% endif %}
           {% else %}
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-check" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M10.354 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
-              <path d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911l-1.318.016z"/>
-            </svg>
-          {% endif %}
-        {% else %}
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-        </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+          </svg>
+        {% endif %}
       {% endif %}
-    {% endif %}
-    </span>
+      </div>
+    </div>
     <div>
       {% if request.user.is_authenticated %}
         {% if request.user != person %}
@@ -50,68 +81,99 @@
               <input class="btn btn-sm btn-outline-dark" type="submit" value="팔로우"/>
             {% endif %}
           </form>
-        {% else %}
-          <input class="btn btn-sm btn-outline-dark" type="button" value="팔로우" disabled/>
         {% endif %}
+      {% else %}
+        <input class="btn btn-sm btn-outline-dark" type="button" value="팔로우" disabled/>
       {% endif %}
     </div>
   </div>
   <!-- header 끝 -->
 
   <!-- information 시작 -->
-  <div>
-    <div>
-      <div>프로필 사진</div>
-      <div>{{ person.email }}</div>
+  <div class="container information-size text-center border">
+    <div class="row h-75 py-2">
+      <div class="col-4 pe-0">
+        <div class="h-100">
+          <img class="w-100 rounded-circle " src="{{person.profile_img.url}}" alt="img" >
+        </div>
+      </div>
+      <div class="col-8 d-flex">
+        <div class="col">
+          <div class="number h-75">{{ person.post_set.all|length }}</div>
+          <div class="h-25">Posts</div>
+        </div>
+        <div class="col">
+          <div class="number h-75">{{ person.followers.all|length }}</div>
+          <div class="h-25">Followers</div>
+        </div>  
+        <div class="col">
+          <div class="number h-75">{{ person.followings.all|length }}</div>
+          <div class="h-25">Following</div>
+        </div>
+      </div>
     </div>
-    <div>
-      <div>{{ person.post_set.all|length }}게시물</div>
-      <div>{{ person.followers.all|length }}팔로워</div>
-      <div>{{ person.followings.all|length }}팔로잉</div>
+    <div class="row h-25 pt-3">
+      <div class="col text-start">
+        email : {{ person.email }}
+      </div>
     </div>
   </div>
   <!-- information 끝 -->
 
   <!-- contents 시작 -->
   <div>
-    <div>
-      <h3>작성한 리뷰</h3>
-      {% for post in person.post_set.all %}
-      <div>{{ post.title }}</div>
-      {% endfor %}
-    </div>
-    <div>
-      <h3>"좋아요"한 리뷰</h3>
-      {% for like_post in person.like_posts.all %}
-      <div>{{ like_post.title }}</div>
-      {% endfor %}
-    </div>
-    <div>
-      <h3>작성한 댓글</h3>
-      {% for comment in person.comments.all %}
-      <div>{{ comment.content }}</div>
-      {% endfor %}
-    </div>
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+            작성한 게시글
+          </button>
+        </h2>
+        <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            {% for post in person.post_set.all %}
+            <div class="posts">
+              <a class="posts" href="{% url 'posts:detail' post.pk %}">{{ post.title }}</a>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+              좋아요한 게시글
+            </button>
+          </h2>
+          <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+              {% for like_post in person.like_posts.all %}
+              <div class="posts">
+                <a class="posts" href="{% url 'posts:detail' like_post.pk %}">{{ like_post.title }}</a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+              작성한 댓글
+            </button>
+          </h2>
+          <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+              {% for comment in person.comment_set.all %}
+              <div>
+                <a class="posts" href="{% url 'posts:detail' comment.post.pk %}">{{ comment.content }}</a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
   </div>
   <!-- contents 끌 -->
-
-  {% endblock content %}
-
-
-
-
   
-  {% comment %} <div>
-    <h3>팔로잉 목록</h3>
-    {% for following in person.followings.all %}
-      <div>{{ following.username }}</div>
-    {% endfor %}
-  </div>
-  <div>
-    <h3>팔로워 목록</h3>
-    {% for follower in person.followers.all %}
-      <div>{{ follower.username }}</div>
-  {% endfor %}
-  </div>
-</div> {% endcomment %}
-<hr>
+</div>  
+{% endblock content %}

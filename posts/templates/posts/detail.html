@@ -7,72 +7,79 @@
 
 
 <div class="row">
-  <div class="col-5 text-center"> 
-    {% if post.image1 %}
-    <img class="rounded" style="width: 85%" src="{{post.image1.url}}" alt="img" />
-    {% endif %}
-    
+  <div class="card object-fit-cover col-5 text-center my-2 shadow p-3 mb-5 bg-body-tertiary rounded border-light" style="width:41%">
     <form
-      action="{% url 'posts:answer' post.pk post.select1_content %}"
-      method="POST"
-    >
-      {% csrf_token %}
-      <button
-        class="btn btn-sm btn-outline-dark my-2"
-        type="submit"
-        name="select1"
-        value="{{post.select1_content}}"
-      >
-        {{ post.select1_content}} : {{ post.select1_users.all|length }}
+          action="{% url 'posts:answer' post.pk post.select1_content %}"
+          method="POST"
+     >
+      {% csrf_token %}  
+      <button class="my-2 btn btn-light" type="submit" name="select1" value="{{post.select1_content}}"/>
+
+        {% if post.image1 %}
+          <img class="card-img-top"  src="{{post.image1.url}}" alt="img" />
+        {% comment %} {% else %}
+          <img src="{% static '1.jpg' %}" alt="one"> {% endcomment %}
+        {% endif %}
+      
+        <div class="card-body">
+          {{ post.select1_content}} : {{ post.select1_users.all|length }}
+        </div>    
+
       </button>
     </form>
-  </div>
-<div class="col-2 d-flex text-center justify-content-center align-items-center">
-  <h4><b>VS</b></h4>
+  </div>    
+  
 
-</div>
-<div class="col-5 text-center">
-  {% if post.image2 %}
-  <img class="rounded" style="width: 85%" src="{{post.image2.url}}" alt="img" />
-  {% endif %}
-  <form
+  <div class="col-2 d-flex text-center justify-content-center align-items-center">
+      <h4><b>VS</b></h4>
+  </div>
+
+
+  
+  <div class="card col-5 text-center my-2 shadow p-3 mb-5 bg-body-tertiary rounded border-light" style="width:41%">
+    <form
     action="{% url 'posts:answer' post.pk post.select2_content %}"
     method="post"
-  >
-    {% csrf_token %}
-    <button
-      class="btn btn-sm btn-outline-dark my-2"
-      type="submit"
-      name="select2"
-      value="{{post.select1_content}}"
     >
-      {{ post.select2_content }} : {{ post.select2_users.all|length }}
-    </button>
-  </form>
-  
+      {% csrf_token %}
+      <button class="col my-2 btn btn-light" type="submit" name="select2" value="{{post.select2_content}}"/>
+          {% if post.image2 %}
+            <img class="card-img-top"  src="{{post.image2.url}}" alt="img" />
+            {% comment %}   {% else %}
+             <img src="{% static '2.jpg' %}" alt="one"> {% endcomment %}
+          {% endif %}
+      
+        <div class="card-body">
+
+          {{ post.select2_content }} : {{ post.select2_users.all|length }}
+        </div>
+      
+      </button>
+    </form>
+
   </div>
+        
 </div>
 
-<div class="d-flex d-inline-block justify-content-end">
-  <form action="{% url 'posts:likes' post.pk %}" method="post">
+<div class="d-flex d-inline-block justify-content-end mt-2">
+  <form id="like-form" data-post-id="{{post.pk}}">
     {% csrf_token %} {% if request.user in post.like_users.all %}
-    <button
+    <input
       class="btn btn-sm btn-outline-dark"
       type="submit"
+      value="좋아요 취소"
 
     > 
-    좋아요 취소 {{ post.like_users.all|length }}
-  </button>
-  
+ 
     {% else %}
-    <button class="btn btn-sm btn-outline-danger" type="submit" />
-    좋아요 {{ post.like_users.all|length }}
-  </button>
+    <input class="btn btn-sm btn-outline-danger" type="submit" value="좋아요" />
   
     {% endif %}
-  </form>
 
-  <a class="d-inline-block justify-content-end btn btn-sm btn-outline-info mx-2" href="{% url 'posts:index' %}"
+  </form>
+  <div class="mt-1 ms-1 small d-flex justify-content-center align-content-center" id="like-count">{{ post.like_users.all|length }}</div>
+
+  <a class="btn btn-sm btn-outline-info mx-2" href="{% url 'posts:index' %}"
   >뒤로가기</a
 >
 
@@ -81,7 +88,7 @@
 
 
 {# comment #}
-<hr>
+<hr class="mt-2">
 <form action="{% url 'posts:comment_create' post.pk %}" method="post">
   {% csrf_token %} {{ comment_form.as_p }}
   <button type="submit" class="btn btn-sm btn-outline-success d-flex justify-content-end">제출</button>
@@ -105,3 +112,58 @@
 {% endfor %} 
 
 {% endblock content %}
+
+{% block script %}
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+  {% comment %} document.querySelector('.card').addEventListener('mouseenter',  function (event) {
+    event.target.style.border = "white";
+    console.log(event.target.style.border)
+  }, false) {% endcomment %}
+
+
+  const form = document.querySelector('#like-form')
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+
+  form.addEventListener('submit', function (event) {
+    // 이벤트 기본 동작 취소
+    event.preventDefault()
+    
+    // likes url을 위해 html에서 post.pk값 가져옴  
+    const postId = event.target.dataset.postId
+
+    // axios로 요청 보내기
+    axios ({
+      method : 'post',
+      url : `/posts/${postId}/likes/`,
+      headers: {'X-CSRFToken': csrftoken},
+
+    })
+    .then((response) => {
+      // console.log(response.data.is_liked)
+      const isLiked = response.data.is_liked
+      const likeBtn = document.querySelector('#like-form > input[type=submit]')
+      if (isLiked === true) {
+
+        // 버튼 조작
+        likeBtn.value = '좋아요 취소'
+
+      } else{
+        likeBtn.value = '좋아요'
+
+      }
+
+      // 좋아요 수 DOM 조작
+      const likeCountTag = document.querySelector('#like-count')
+
+      const likeCountData = response.data.like_count
+
+      // 선택한 span 태그의 내용을 좋아요 수 데이터로 채워넣기
+      likeCountTag.textContent = likeCountData
+    })
+  })
+</script>
+
+{% endblock script %}
